@@ -78,6 +78,17 @@
             "stack_products": false,
             "show_quick_buy": true
           }
+        },
+        "accordion_99979h": {
+          "type": "accordion",
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "none",
+            "title": "تفاصيل المنتج",
+            "content": "<p>Share some content to your customers about your products.</p>",
+            "liquid": "مقاس :  75*28 سم \n\n \n\n مقاس : 68*25 سم \n\nيفضل غسل الألوان الغامقة منفردة\n\n \n\nتميزي باقتناء منشفة الشعر العصرية والأنيقة من ريفي ، عند تجربتها لن تستطيعي الاستغناء عنها \n\nفهي المنتج الأكثر طلبا لعام 2023 و مصممة لتتناسب مع احتياجك اليومي , الغطاء المودرن من ريفي\n\nذا تصميم مميز وعصري وبألوان جذابة ليضيف على استحمامك شعور الرفاهية و التألق\n\nمزود بحلقة دائرية\n\nبالخلف وفيونكة جميلة للتثبيت لتضمني جفاف شعرك بسرعة فائقة ..  منشفة ريفي الخاصة بالشعر مصنوعة\n\nمن خامة الكورال فليس عالية الجودة\n\nقوية الامتصاص وناعمة الملمس , و الأهم من ذلك لا تترك وبرا على شعرك , مثالية لتصبح هدية مع روب الاستحمام المودرن للعائلة و الأصدقاء ...",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -90,7 +101,8 @@
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "complementary_products"
+        "complementary_products",
+        "accordion_99979h"
       ],
       "settings": {
         "color_scheme": "",
