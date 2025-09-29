@@ -37,13 +37,6 @@
           "type": "separator",
           "settings": {}
         },
-        "description": {
-          "type": "description",
-          "settings": {
-            "collapse_content": false,
-            "show_below_gallery": false
-          }
-        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -54,8 +47,16 @@
             "size_chart_page": ""
           }
         },
+        "description": {
+          "type": "description",
+          "settings": {
+            "collapse_content": false,
+            "show_below_gallery": false
+          }
+        },
         "quantity_selector": {
           "type": "quantity_selector",
+          "disabled": true,
           "settings": {}
         },
         "buy_buttons": {
@@ -114,8 +115,8 @@
         "price",
         "payment_terms",
         "separator",
-        "description",
         "variant_picker",
+        "description",
         "quantity_selector",
         "buy_buttons",
         "complementary_products",
