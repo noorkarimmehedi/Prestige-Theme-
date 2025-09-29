@@ -2139,6 +2139,87 @@
           "default_checkbox": "تعيين كطريقة دفع افتراضية"
         }
       }
+    },
+    "settings": {
+      "log_out_everywhere": {
+        "warning_message": "سيتم تسجيل خروجك أيضًا على هذا الجهاز."
+      }
+    },
+    "shop_ads": {
+      "title": "عروض حصرية من المتجر",
+      "subtitle": "متاح لفترة محدودة",
+      "button": "استكشف في المتجر",
+      "previous_button": "سابق",
+      "next_button": "التالي"
+    },
+    "knowledge_base": {
+      "self_serve_returns": {
+        "enabled": "يمكن للعملاء طلب وإدارة الإرجاعات بأنفسهم.",
+        "disabled": "يجب على العملاء الاتصال بالتاجر لطلب الإرجاع."
+      }
+    },
+    "subscriptions": {
+      "update_payment_instrument": {
+        "title": "استبدال طريقة الدفع",
+        "loading": "تحميل طرق الدفع",
+        "no_payment_methods_available": "لا توجد طرق دفع متاحة",
+        "select_new_payment_method": "اختر طريقة دفع جديدة",
+        "current_method": "حاضِر",
+        "cancel": "يلغي",
+        "save": "يحفظ",
+        "success": "تم تحديث طريقة الدفع",
+        "use_new_payment_method": "+ استخدم طريقة الدفع الجديدة"
+      },
+      "subscription_contracts": {
+        "title": "استخدم طريقة الدفع للطلبات المتكررة",
+        "more_items": {
+          "one": "و {{count}} منتج آخر",
+          "other": "و {{count}} منتجات أخرى"
+        },
+        "product_count": {
+          "one": "{{count}} منتج",
+          "other": "{{count}} منتجات"
+        },
+        "contracts_update_failed": "فشل تحديث بعض عقود الاشتراك",
+        "subscription_contracts_updated": "تم تحديث {{succeeded}} من {{total}} اشتراك",
+        "load_more": "تحميل المزيد"
+      },
+      "updating_contracts": {
+        "one": "جاري تحديث عقد الاشتراك {{count}} ...",
+        "other": "جاري تحديث {{count}} عقود الاشتراك..."
+      },
+      "contracts_updated": {
+        "one": "تم تحديث عقد الاشتراك {{count}} بنجاح",
+        "other": "تم تحديث {{count}} عقود الاشتراك بنجاح"
+      },
+      "contracts_update_failed": "فشل تحديث بعض عقود الاشتراك"
+    },
+    "sign_in": {
+      "brand_logo_alt_text": "شعار %{shop_name}",
+      "processing": "يعالج…",
+      "step_one": {
+        "page_title": "تسجيل الدخول - %{shop_name}",
+        "heading": "تسجيل الدخول",
+        "subheading": "أدخل بريدك الإلكتروني وسنرسل لك رمز التحقق",
+        "subheading_with_sign_in_options": "اختر الطريقة التي تريد تسجيل الدخول بها",
+        "input_field_label": "بريد إلكتروني",
+        "button": "يكمل",
+        "or": "أو"
+      },
+      "step_two": {
+        "page_title": "أدخل الرمز - %{shop_name}",
+        "heading": "أدخل الرمز",
+        "subheading": "تم الإرسال إلى %{email}",
+        "restart_link": "تسجيل الدخول باستخدام بريد إلكتروني مختلف",
+        "input_field_label": "رمز مكون من 6 أرقام",
+        "button": "يُقدِّم"
+      },
+      "error": {
+        "invalid": {
+          "invalid_email": "أدخل عنوان بريد إلكتروني صالح",
+          "invalid_code": "أدخل الرمز الصحيح المكون من 6 أرقام"
+        }
+      }
     }
   }
 }
