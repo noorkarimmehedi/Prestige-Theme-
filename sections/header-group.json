@@ -17,7 +17,7 @@
         "message-1": {
           "type": "message",
           "settings": {
-            "text": "New Season, New You – 30% OFF Today Only!"
+            "text": "عيش متعة الصيف بخصم إضافي بكود : صيف"
           }
         }
       },
@@ -30,7 +30,7 @@
         "autoplay": true,
         "cycle_speed": 5,
         "desktop_font_size": 11,
-        "mobile_font_size": 10
+        "mobile_font_size": 14
       }
     },
     "header": {
