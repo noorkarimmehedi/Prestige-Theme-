@@ -49,7 +49,7 @@
           "settings": {
             "hide_sold_out_variants": false,
             "selector_style": "block",
-            "swatch_selector_style": "swatch",
+            "swatch_selector_style": "block_swatch",
             "variant_image_options": "",
             "size_chart_page": ""
           }
@@ -71,6 +71,7 @@
         },
         "complementary_products": {
           "type": "complementary_products",
+          "disabled": true,
           "settings": {
             "title": "Pairs well with",
             "products_count": 2,
@@ -79,8 +80,20 @@
             "show_quick_buy": true
           }
         },
+        "accordion_yVxiP6": {
+          "type": "accordion",
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "none",
+            "title": "Product details",
+            "content": "<ul><li>Beige organic cotton lining</li><li>Adjustable shoulder strap (98 à 110cm)</li><li>Back pocket with snap closure and Inside pocket with snap closure</li><li>Weight: 400g</li><li>Custom-made DuoLock™️ clasp in stainless steel with gold PVD finish</li><li>Dimensions : 22x14x5cm / 8.7x5.5x2inch</li></ul>",
+            "liquid": "",
+            "page": ""
+          }
+        },
         "offers_fkPf3h": {
           "type": "offers",
+          "disabled": true,
           "settings": {
             "stack_offers": false,
             "offer_1_title": "Write something",
@@ -106,6 +119,7 @@
         "quantity_selector",
         "buy_buttons",
         "complementary_products",
+        "accordion_yVxiP6",
         "offers_fkPf3h"
       ],
       "settings": {
