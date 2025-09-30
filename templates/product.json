@@ -20,7 +20,7 @@
         "title": {
           "type": "title",
           "settings": {
-            "heading_tag": "h3"
+            "heading_tag": "h5"
           }
         },
         "price": {
@@ -121,6 +121,9 @@
         "complementary_products",
         "accordion_yVxiP6",
         "offers_fkPf3h"
+      ],
+      "custom_css": [
+        "h1 {font-size: 15px;}"
       ],
       "settings": {
         "color_scheme": "",
