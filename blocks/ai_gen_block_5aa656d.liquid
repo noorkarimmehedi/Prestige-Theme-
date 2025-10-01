@@ -217,10 +217,16 @@
       constructor() {
         super();
         this.currentIndex = 0;
-        this.itemsPerViewDesktop = {{ block.settings.slides_desktop }};
-        this.itemsPerViewMobile = {{ block.settings.slides_mobile }};
-        this.scrollAmount = {{ block.settings.scroll_amount }};
-        this.gap = {{ block.settings.category_gap }};
+        this.itemsPerViewDesktop = parseInt({{ block.settings.slides_desktop }}) || 6;
+        this.itemsPerViewMobile = parseInt({{ block.settings.slides_mobile }}) || 2;
+        this.scrollAmount = parseInt({{ block.settings.scroll_amount }}) || 2;
+        this.gap = parseInt({{ block.settings.category_gap }}) || 20;
+        
+        console.log('Carousel initialized with:', {
+          desktop: this.itemsPerViewDesktop,
+          mobile: this.itemsPerViewMobile,
+          gap: this.gap
+        });
       }
 
       connectedCallback() {
@@ -231,10 +237,11 @@
         
         if (!this.container || this.items.length === 0) return;
 
-        // Force initial calculation
-        setTimeout(() => {
-          this.init();
-        }, 50);
+        // Multiple attempts to ensure proper initialization
+        this.init();
+        
+        setTimeout(() => this.init(), 100);
+        setTimeout(() => this.init(), 300);
         
         let resizeTimer;
         window.addEventListener('resize', () => {
@@ -243,6 +250,14 @@
             this.currentIndex = 0;
             this.init();
           }, 150);
+        });
+        
+        // Also reinit on orientation change
+        window.addEventListener('orientationchange', () => {
+          setTimeout(() => {
+            this.currentIndex = 0;
+            this.init();
+          }, 200);
         });
       }
 
@@ -253,33 +268,50 @@
       }
 
       calculateDimensions() {
-        // Get current viewport width
-        const viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        // Get current viewport width - try multiple methods
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         
-        // Determine items per view based on viewport
-        if (viewportWidth <= 768) {
-          this.itemsPerView = this.itemsPerViewMobile;
-        } else {
-          this.itemsPerView = this.itemsPerViewDesktop;
-        }
+        // Determine items per view based on viewport with clear logging
+        const isMobile = viewportWidth <= 768;
+        this.itemsPerView = isMobile ? this.itemsPerViewMobile : this.itemsPerViewDesktop;
         
-        // Get actual container width (the carousel wrapper)
+        console.log('Calculate dimensions:', {
+          viewportWidth: viewportWidth,
+          isMobile: isMobile,
+          itemsPerView: this.itemsPerView,
+          setting: isMobile ? 'mobile' : 'desktop'
+        });
+        
+        // Get actual container width
         const carousel = this.container.parentElement;
         const containerWidth = carousel.offsetWidth;
         
-        // Calculate item width: (container width - total gap width) / items per view
+        // Calculate item width
         const totalGapWidth = (this.itemsPerView - 1) * this.gap;
         const calculatedWidth = (containerWidth - totalGapWidth) / this.itemsPerView;
         this.itemWidth = Math.floor(calculatedWidth);
         
-        // Apply width to each item with !important via inline style
+        console.log('Width calculation:', {
+          containerWidth: containerWidth,
+          totalGapWidth: totalGapWidth,
+          itemWidth: this.itemWidth
+        });
+        
+        // Clear any existing styles first
         this.items.forEach(item => {
-          item.style.cssText = `
-            width: ${this.itemWidth}px !important;
-            min-width: ${this.itemWidth}px !important;
-            max-width: ${this.itemWidth}px !important;
-            flex: 0 0 ${this.itemWidth}px !important;
-          `;
+          item.style.cssText = '';
+        });
+        
+        // Apply width to each item - force with requestAnimationFrame
+        requestAnimationFrame(() => {
+          this.items.forEach(item => {
+            item.style.width = `${this.itemWidth}px`;
+            item.style.minWidth = `${this.itemWidth}px`;
+            item.style.maxWidth = `${this.itemWidth}px`;
+            item.style.flexShrink = '0';
+            item.style.flexGrow = '0';
+            item.style.flexBasis = `${this.itemWidth}px`;
+          });
         });
       }
 
