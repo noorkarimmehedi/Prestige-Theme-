@@ -79,12 +79,6 @@
     margin-top: {{ block.settings.nav_gap }}px;
   }
 
-  @media (max-width: 768px) {
-    .ai-category-nav-{{ ai_gen_id }} {
-      display: none;
-    }
-  }
-
   .ai-category-nav-btn-{{ ai_gen_id }} {
     background: {{ block.settings.nav_button_color }};
     border: none;
@@ -320,62 +314,45 @@
       nextBtn.addEventListener('click', () => move('next'));
     }
     
-    // Touch/swipe support with live dragging
+    // Touch/swipe support
     let touchStartX = 0;
     let touchStartY = 0;
     let isDragging = false;
-    let hasMoved = false;
     
     track.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
       isDragging = true;
-      hasMoved = false;
     }, { passive: true });
     
     track.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
       
-      const touchX = e.touches[0].clientX;
       const touchY = e.touches[0].clientY;
-      const diffX = touchX - touchStartX;
       const diffY = Math.abs(touchY - touchStartY);
       
-      // If vertical scroll is dominant, allow it
-      if (diffY > Math.abs(diffX) && diffY > 10) {
+      // Allow vertical scrolling if user is scrolling vertically
+      if (diffY > 10) {
         isDragging = false;
-        return;
-      }
-      
-      // Mark that we've moved
-      if (Math.abs(diffX) > 10) {
-        hasMoved = true;
       }
     }, { passive: true });
     
     track.addEventListener('touchend', (e) => {
-      if (!isDragging || !hasMoved) {
-        isDragging = false;
-        return;
-      }
-      
-      isDragging = false;
+      if (!isDragging) return;
       
       const touchEndX = e.changedTouches[0].clientX;
-      const movedBy = touchEndX - touchStartX;
+      const diff = touchStartX - touchEndX;
       
-      // Determine if we should move to next/prev slide
-      if (Math.abs(movedBy) > 50) {
-        if (movedBy < 0) {
-          // Swiped left - go next
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
           move('next');
         } else {
-          // Swiped right - go prev
           move('prev');
         }
       }
+      
+      isDragging = false;
     }, { passive: true });
-
     
     // Handle window resize
     let resizeTimer;
