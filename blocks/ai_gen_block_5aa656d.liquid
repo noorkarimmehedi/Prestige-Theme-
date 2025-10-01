@@ -24,8 +24,6 @@
   .ai-category-item-{{ ai_gen_id }} {
     text-align: center;
     padding: 15px 0;
-    flex-shrink: 0;
-    flex-grow: 0;
     box-sizing: border-box;
   }
 
@@ -233,7 +231,10 @@
         
         if (!this.container || this.items.length === 0) return;
 
-        this.init();
+        // Force initial calculation
+        setTimeout(() => {
+          this.init();
+        }, 50);
         
         let resizeTimer;
         window.addEventListener('resize', () => {
@@ -252,25 +253,34 @@
       }
 
       calculateDimensions() {
-        // Use proper breakpoint detection
-        const windowWidth = window.innerWidth;
-        this.itemsPerView = windowWidth <= 768 ? this.itemsPerViewMobile : this.itemsPerViewDesktop;
+        // Get current viewport width
+        const viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
         
-        // Get actual container width
-        const containerWidth = this.container.parentElement.offsetWidth;
+        // Determine items per view based on viewport
+        if (viewportWidth <= 768) {
+          this.itemsPerView = this.itemsPerViewMobile;
+        } else {
+          this.itemsPerView = this.itemsPerViewDesktop;
+        }
+        
+        // Get actual container width (the carousel wrapper)
+        const carousel = this.container.parentElement;
+        const containerWidth = carousel.offsetWidth;
         
         // Calculate item width: (container width - total gap width) / items per view
         const totalGapWidth = (this.itemsPerView - 1) * this.gap;
-        this.itemWidth = (containerWidth - totalGapWidth) / this.itemsPerView;
+        const calculatedWidth = (containerWidth - totalGapWidth) / this.itemsPerView;
+        this.itemWidth = Math.floor(calculatedWidth);
         
-        // Set width for each item explicitly
+        // Apply width to each item with !important via inline style
         this.items.forEach(item => {
-          item.style.width = `${this.itemWidth}px`;
-          item.style.minWidth = `${this.itemWidth}px`;
-          item.style.maxWidth = `${this.itemWidth}px`;
+          item.style.cssText = `
+            width: ${this.itemWidth}px !important;
+            min-width: ${this.itemWidth}px !important;
+            max-width: ${this.itemWidth}px !important;
+            flex: 0 0 ${this.itemWidth}px !important;
+          `;
         });
-        
-        console.log('Window width:', windowWidth, 'Items per view:', this.itemsPerView, 'Item width:', this.itemWidth);
       }
 
       setupEventListeners() {
