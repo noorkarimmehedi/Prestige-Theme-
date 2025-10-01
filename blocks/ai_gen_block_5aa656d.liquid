@@ -79,6 +79,12 @@
     margin-top: {{ block.settings.nav_gap }}px;
   }
 
+  @media (max-width: 768px) {
+    .ai-category-nav-{{ ai_gen_id }} {
+      display: none;
+    }
+  }
+
   .ai-category-nav-btn-{{ ai_gen_id }} {
     background: {{ block.settings.nav_button_color }};
     border: none;
