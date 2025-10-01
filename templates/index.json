@@ -251,7 +251,7 @@
             "expand_collection": false,
             "content_position": "place-self-end-start text-start",
             "subheading": "",
-            "title": "",
+            "title": "Casual Shirts",
             "button_text": "View products",
             "button_link": "",
             "button_style": "solid",
@@ -390,6 +390,7 @@
         "before",
         "after"
       ],
+      "disabled": true,
       "settings": {
         "color_scheme": "",
         "separate_section_with_border": true,
