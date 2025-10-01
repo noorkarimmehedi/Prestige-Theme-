@@ -65,7 +65,7 @@
             "show_gift_card_recipient": true,
             "atc_button_background": "",
             "atc_button_text_color": "",
-            "payment_button_background": "",
+            "payment_button_background": "#7a0707",
             "payment_button_text_color": ""
           }
         },
@@ -124,6 +124,13 @@
             "page": ""
           }
         },
+        "more_information_Ebr38j": {
+          "type": "more_information",
+          "disabled": true,
+          "settings": {
+            "text": "More information"
+          }
+        },
         "offers_fkPf3h": {
           "type": "offers",
           "disabled": true,
@@ -156,6 +163,7 @@
         "accordion_TzMhjA",
         "accordion_kkTkVq",
         "accordion_tnkXEq",
+        "more_information_Ebr38j",
         "offers_fkPf3h"
       ],
       "custom_css": [
