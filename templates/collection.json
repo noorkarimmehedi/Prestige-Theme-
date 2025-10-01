@@ -75,9 +75,13 @@
             "nav_button_hover_color": "#333333",
             "dot_color": "#cccccc",
             "dot_active_color": "#ab8c52",
+            "heading_font": "cardo_n4",
             "heading_size": 32,
+            "subtitle_font": "figtree_n4",
             "subtitle_size": 16,
+            "card_title_font": "cardo_n4",
             "card_title_size": 20,
+            "card_count_font": "assistant_n4",
             "card_count_size": 14,
             "section_padding_top": 50,
             "section_padding_bottom": 80
