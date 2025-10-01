@@ -91,6 +91,39 @@
             "page": ""
           }
         },
+        "accordion_TzMhjA": {
+          "type": "accordion",
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "none",
+            "title": "OFFERS",
+            "content": "<ul><li>Handcrafted in Bangladesh</li><li>Material - Leather</li><li>Sole - Rubber Padded Insole</li></ul>",
+            "liquid": "",
+            "page": ""
+          }
+        },
+        "accordion_kkTkVq": {
+          "type": "accordion",
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "none",
+            "title": "DELIVERY",
+            "content": "<ul><li>Handcrafted in Bangladesh</li><li>Material - Leather</li><li>Sole - Rubber Padded Insole</li></ul>",
+            "liquid": "",
+            "page": ""
+          }
+        },
+        "accordion_tnkXEq": {
+          "type": "accordion",
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "none",
+            "title": "RETURNS",
+            "content": "<ul><li>Handcrafted in Bangladesh</li><li>Material - Leather</li><li>Sole - Rubber Padded Insole</li></ul>",
+            "liquid": "",
+            "page": ""
+          }
+        },
         "offers_fkPf3h": {
           "type": "offers",
           "disabled": true,
@@ -120,6 +153,9 @@
         "buy_buttons",
         "complementary_products",
         "accordion_yVxiP6",
+        "accordion_TzMhjA",
+        "accordion_kkTkVq",
+        "accordion_tnkXEq",
         "offers_fkPf3h"
       ],
       "custom_css": [
