@@ -369,20 +369,8 @@
         e.preventDefault();
       }
       
-      // Apply drag with boundaries
-      const itemWidth = items[0].offsetWidth;
-      const maxTranslate = 0;
-      const minTranslate = (items.length - slidesPerView) * (itemWidth + gap);
-      
-      let newTranslate = initialTranslate - diffX;
-      
-      // Add resistance at boundaries
-      if (newTranslate < maxTranslate) {
-        newTranslate = maxTranslate - (maxTranslate - newTranslate) * 0.3;
-      } else if (newTranslate > minTranslate) {
-        newTranslate = minTranslate + (newTranslate - minTranslate) * 0.3;
-      }
-      
+      // Apply drag - allow free movement during drag
+      const newTranslate = initialTranslate - diffX;
       track.style.transform = `translateX(-${newTranslate}px)`;
     }, { passive: false });
     
