@@ -30,6 +30,7 @@
             "nav_button_text_color": "#ffffff",
             "nav_button_hover_color": "#333333",
             "category_1_title": "New Arrival",
+            "category_1_image": "shopify://shop_images/demo.png",
             "category_1_link": "",
             "category_2_title": "Formal",
             "category_2_link": "",
