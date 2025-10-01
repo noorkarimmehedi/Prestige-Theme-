@@ -133,10 +133,10 @@
         "item_nBiVVM": {
           "type": "item",
           "settings": {
-            "icon": "picto-shield",
+            "icon": "picto-calendar",
             "icon_width": 24,
             "mobile_icon_width": 24,
-            "title": "Secure payment",
+            "title": "NEW STYLE EVERY WEEK",
             "content": ""
           }
         }
