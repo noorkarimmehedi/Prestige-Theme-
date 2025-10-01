@@ -278,17 +278,9 @@
       const maxIndex = Math.max(0, items.length - slidesPerView);
       
       if (direction === 'next') {
-        currentIndex = currentIndex + scrollAmount;
-        // Loop back to start if we exceed the end
-        if (currentIndex > maxIndex) {
-          currentIndex = 0;
-        }
+        currentIndex = Math.min(currentIndex + scrollAmount, maxIndex);
       } else {
-        currentIndex = currentIndex - scrollAmount;
-        // Loop to end if we go before the start
-        if (currentIndex < 0) {
-          currentIndex = maxIndex;
-        }
+        currentIndex = Math.max(currentIndex - scrollAmount, 0);
       }
       
       updateCarousel();
@@ -310,13 +302,12 @@
     function updateButtons() {
       const maxIndex = Math.max(0, items.length - slidesPerView);
       
-      // In infinite loop mode, buttons are never disabled (except when all items fit)
       if (prevBtn) {
-        prevBtn.disabled = items.length <= slidesPerView;
+        prevBtn.disabled = currentIndex === 0;
       }
       
       if (nextBtn) {
-        nextBtn.disabled = items.length <= slidesPerView;
+        nextBtn.disabled = currentIndex >= maxIndex || items.length <= slidesPerView;
       }
     }
     
@@ -333,20 +324,13 @@
     let touchStartX = 0;
     let touchStartY = 0;
     let isDragging = false;
-    let initialTranslate = 0;
+    let hasMoved = false;
     
     track.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
       isDragging = true;
-      
-      // Disable transition during drag
-      track.style.transition = 'none';
-      
-      // Calculate current translate based on currentIndex
-      updateSlidesPerView();
-      const itemWidth = items[0].offsetWidth;
-      initialTranslate = currentIndex * (itemWidth + gap);
+      hasMoved = false;
     }, { passive: true });
     
     track.addEventListener('touchmove', (e) => {
@@ -360,30 +344,25 @@
       // If vertical scroll is dominant, allow it
       if (diffY > Math.abs(diffX) && diffY > 10) {
         isDragging = false;
-        track.style.transition = 'transform 0.3s ease-out';
         return;
       }
       
-      // Prevent default only for horizontal swipes
+      // Mark that we've moved
       if (Math.abs(diffX) > 10) {
-        e.preventDefault();
+        hasMoved = true;
       }
-      
-      // Apply drag - allow free movement during drag
-      const newTranslate = initialTranslate - diffX;
-      track.style.transform = `translateX(-${newTranslate}px)`;
-    }, { passive: false });
+    }, { passive: true });
     
     track.addEventListener('touchend', (e) => {
-      if (!isDragging) return;
+      if (!isDragging || !hasMoved) {
+        isDragging = false;
+        return;
+      }
       
       isDragging = false;
       
       const touchEndX = e.changedTouches[0].clientX;
       const movedBy = touchEndX - touchStartX;
-      
-      // Re-enable transition
-      track.style.transition = 'transform 0.3s ease-out';
       
       // Determine if we should move to next/prev slide
       if (Math.abs(movedBy) > 50) {
@@ -394,11 +373,8 @@
           // Swiped right - go prev
           move('prev');
         }
-      } else {
-        // Snap back to current position
-        updateCarousel();
       }
-    });
+    }, { passive: true });
 
     
     // Handle window resize
