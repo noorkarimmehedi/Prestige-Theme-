@@ -320,45 +320,94 @@
       nextBtn.addEventListener('click', () => move('next'));
     }
     
-    // Touch/swipe support
+    // Touch/swipe support with live dragging
     let touchStartX = 0;
     let touchStartY = 0;
     let isDragging = false;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID = 0;
     
     track.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
       isDragging = true;
+      animationID = requestAnimationFrame(animation);
+      track.style.transition = 'none';
+      
+      // Get current translate value
+      const transform = window.getComputedStyle(track).transform;
+      if (transform !== 'none') {
+        const matrix = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
+        prevTranslate = parseFloat(matrix[4]);
+      } else {
+        prevTranslate = 0;
+      }
     }, { passive: true });
     
     track.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
       
+      const touchX = e.touches[0].clientX;
       const touchY = e.touches[0].clientY;
+      const diffX = touchX - touchStartX;
       const diffY = Math.abs(touchY - touchStartY);
       
-      // Allow vertical scrolling if user is scrolling vertically
-      if (diffY > 10) {
+      // If vertical scroll is dominant, allow it
+      if (diffY > Math.abs(diffX) && diffY > 10) {
         isDragging = false;
+        cancelAnimationFrame(animationID);
+        return;
       }
-    }, { passive: true });
+      
+      // Prevent default only for horizontal swipes
+      if (Math.abs(diffX) > 10) {
+        e.preventDefault();
+      }
+      
+      currentTranslate = prevTranslate + diffX;
+    }, { passive: false });
     
     track.addEventListener('touchend', (e) => {
       if (!isDragging) return;
       
-      const touchEndX = e.changedTouches[0].clientX;
-      const diff = touchStartX - touchEndX;
+      cancelAnimationFrame(animationID);
+      isDragging = false;
       
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) {
+      const touchEndX = e.changedTouches[0].clientX;
+      const movedBy = touchEndX - touchStartX;
+      
+      // Re-enable transition
+      track.style.transition = 'transform 0.3s ease-out';
+      
+      // Determine if we should move to next/prev slide
+      if (Math.abs(movedBy) > 50) {
+        if (movedBy < 0) {
           move('next');
         } else {
           move('prev');
         }
+      } else {
+        // Snap back to current position
+        updateCarousel();
       }
-      
-      isDragging = false;
-    }, { passive: true });
+    });
+    
+    function animation() {
+      if (isDragging) {
+        // Apply boundary constraints
+        updateSlidesPerView();
+        const itemWidth = items[0].offsetWidth;
+        const maxTranslate = 0;
+        const minTranslate = -((items.length - slidesPerView) * (itemWidth + gap));
+        
+        // Clamp the translate value
+        const boundedTranslate = Math.max(Math.min(currentTranslate, maxTranslate), minTranslate);
+        
+        track.style.transform = `translateX(${boundedTranslate}px)`;
+        requestAnimationFrame(animation);
+      }
+    }
     
     // Handle window resize
     let resizeTimer;
