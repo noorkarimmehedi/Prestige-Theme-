@@ -324,23 +324,20 @@
     let touchStartX = 0;
     let touchStartY = 0;
     let isDragging = false;
-    let startTranslate = 0;
-    let currentTranslate = 0;
-    let animationID = 0;
+    let initialTranslate = 0;
     
     track.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
       isDragging = true;
+      
+      // Disable transition during drag
       track.style.transition = 'none';
       
-      // Store the current position
+      // Calculate current translate based on currentIndex
       updateSlidesPerView();
       const itemWidth = items[0].offsetWidth;
-      startTranslate = -(currentIndex * (itemWidth + gap));
-      currentTranslate = startTranslate;
-      
-      animationID = requestAnimationFrame(animation);
+      initialTranslate = currentIndex * (itemWidth + gap);
     }, { passive: true });
     
     track.addEventListener('touchmove', (e) => {
@@ -354,7 +351,6 @@
       // If vertical scroll is dominant, allow it
       if (diffY > Math.abs(diffX) && diffY > 10) {
         isDragging = false;
-        cancelAnimationFrame(animationID);
         track.style.transition = 'transform 0.3s ease-out';
         return;
       }
@@ -364,14 +360,26 @@
         e.preventDefault();
       }
       
-      // Calculate new translate position
-      currentTranslate = startTranslate + diffX;
+      // Apply drag with boundaries
+      const itemWidth = items[0].offsetWidth;
+      const maxTranslate = 0;
+      const minTranslate = (items.length - slidesPerView) * (itemWidth + gap);
+      
+      let newTranslate = initialTranslate - diffX;
+      
+      // Add resistance at boundaries
+      if (newTranslate < maxTranslate) {
+        newTranslate = maxTranslate - (maxTranslate - newTranslate) * 0.3;
+      } else if (newTranslate > minTranslate) {
+        newTranslate = minTranslate + (newTranslate - minTranslate) * 0.3;
+      }
+      
+      track.style.transform = `translateX(-${newTranslate}px)`;
     }, { passive: false });
     
     track.addEventListener('touchend', (e) => {
       if (!isDragging) return;
       
-      cancelAnimationFrame(animationID);
       isDragging = false;
       
       const touchEndX = e.changedTouches[0].clientX;
@@ -394,30 +402,7 @@
         updateCarousel();
       }
     });
-    
-    function animation() {
-      if (isDragging) {
-        // Apply boundary constraints
-        updateSlidesPerView();
-        const itemWidth = items[0].offsetWidth;
-        const maxTranslate = 0;
-        const minTranslate = -((items.length - slidesPerView) * (itemWidth + gap));
-        
-        // Clamp the translate value with resistance at edges
-        let boundedTranslate = currentTranslate;
-        
-        if (boundedTranslate > maxTranslate) {
-          // Add resistance at the start
-          boundedTranslate = maxTranslate + (boundedTranslate - maxTranslate) * 0.3;
-        } else if (boundedTranslate < minTranslate) {
-          // Add resistance at the end
-          boundedTranslate = minTranslate + (boundedTranslate - minTranslate) * 0.3;
-        }
-        
-        track.style.transform = `translateX(${boundedTranslate}px)`;
-        requestAnimationFrame(animation);
-      }
-    }
+
     
     // Handle window resize
     let resizeTimer;
