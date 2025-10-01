@@ -150,7 +150,7 @@
       ],
       "name": "t:sections.text_with_icons.presets.text_with_icons.name",
       "settings": {
-        "color_scheme": "scheme-3",
+        "color_scheme": "scheme-2",
         "separate_section_with_border": true,
         "stack_on_mobile": true,
         "icon_color": "",
