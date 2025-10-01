@@ -80,7 +80,7 @@
             "card_title_size": 20,
             "card_count_size": 14,
             "section_padding_top": 50,
-            "section_padding_bottom": 50
+            "section_padding_bottom": 80
           },
           "blocks": {}
         }
