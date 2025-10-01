@@ -37,16 +37,6 @@
           "type": "separator",
           "settings": {}
         },
-        "variant_picker": {
-          "type": "variant_picker",
-          "settings": {
-            "hide_sold_out_variants": false,
-            "selector_style": "block",
-            "swatch_selector_style": "swatch",
-            "variant_image_options": "",
-            "size_chart_page": ""
-          }
-        },
         "description": {
           "type": "description",
           "settings": {
@@ -57,6 +47,16 @@
         "quantity_selector": {
           "type": "quantity_selector",
           "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "hide_sold_out_variants": false,
+            "selector_style": "block",
+            "swatch_selector_style": "swatch",
+            "variant_image_options": "",
+            "size_chart_page": ""
+          }
         },
         "buy_buttons": {
           "type": "buy_buttons",
@@ -147,9 +147,9 @@
         "price",
         "payment_terms",
         "separator",
-        "variant_picker",
         "description",
         "quantity_selector",
+        "variant_picker",
         "buy_buttons",
         "complementary_products",
         "accordion_yVxiP6",
