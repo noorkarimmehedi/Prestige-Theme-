@@ -4,6 +4,7 @@
   .ai-category-carousel-wrapper-{{ ai_gen_id }} {
     background-color: {{ block.settings.section_background_color }};
     padding: {{ block.settings.section_padding }}px 0;
+    overflow: hidden;
   }
 
   .ai-category-carousel-{{ ai_gen_id }} {
@@ -23,8 +24,8 @@
   .ai-category-item-{{ ai_gen_id }} {
     text-align: center;
     padding: 15px 0;
-    flex: 0 0 auto;
-    min-width: calc((100% - ({{ block.settings.slides_desktop | minus: 1 }} * {{ block.settings.category_gap }}px)) / {{ block.settings.slides_desktop }});
+    flex-shrink: 0;
+    box-sizing: border-box;
   }
 
   .ai-category-item-{{ ai_gen_id }} img {
@@ -113,10 +114,6 @@
   }
 
   @media (max-width: 768px) {
-    .ai-category-item-{{ ai_gen_id }} {
-      min-width: calc((100% - ({{ block.settings.slides_mobile | minus: 1 }} * {{ block.settings.category_gap }}px)) / {{ block.settings.slides_mobile }});
-    }
-
     .ai-category-item-{{ ai_gen_id }} img {
       height: {{ block.settings.image_size | times: 0.7 }}px;
       width: {{ block.settings.image_size | times: 0.7 }}px;
@@ -166,7 +163,7 @@
           {% assign category_link = block.settings[link_key] %}
           
           {% if category_title != blank %}
-            <div class="ai-category-item-{{ ai_gen_id }}">
+            <div class="ai-category-item-{{ ai_gen_id }}" data-carousel-item>
               {% if category_link != blank %}
                 <a href="{{ category_link }}">
               {% endif %}
@@ -221,49 +218,93 @@
       constructor() {
         super();
         this.currentIndex = 0;
-        this.itemsPerView = {{ block.settings.slides_desktop }};
+        this.itemsPerViewDesktop = {{ block.settings.slides_desktop }};
         this.itemsPerViewMobile = {{ block.settings.slides_mobile }};
         this.scrollAmount = {{ block.settings.scroll_amount }};
+        this.gap = {{ block.settings.category_gap }};
       }
 
       connectedCallback() {
         this.container = this.querySelector('[data-carousel-container]');
         this.prevBtn = this.querySelector('[data-prev-btn]');
         this.nextBtn = this.querySelector('[data-next-btn]');
-        this.items = this.querySelectorAll('.ai-category-item-{{ ai_gen_id }}');
+        this.items = Array.from(this.querySelectorAll('[data-carousel-item]'));
         
         if (!this.container || this.items.length === 0) return;
 
-        this.updateItemsPerView();
-        this.setupEventListeners();
-        this.updateButtons();
+        this.init();
         
+        let resizeTimer;
         window.addEventListener('resize', () => {
-          this.updateItemsPerView();
-          // Reset position on resize to prevent overflow
-          this.currentIndex = 0;
-          this.updateCarousel();
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            this.currentIndex = 0;
+            this.init();
+          }, 150);
         });
       }
 
-      updateItemsPerView() {
-        this.itemsPerView = window.innerWidth <= 768 ? this.itemsPerViewMobile : {{ block.settings.slides_desktop }};
+      init() {
+        this.calculateDimensions();
+        this.setupEventListeners();
+        this.updateCarousel();
+      }
+
+      calculateDimensions() {
+        const isMobile = window.innerWidth <= 768;
+        this.itemsPerView = isMobile ? this.itemsPerViewMobile : this.itemsPerViewDesktop;
+        
+        // Get actual container width
+        const containerWidth = this.container.parentElement.offsetWidth;
+        
+        // Calculate item width: (container width - total gap width) / items per view
+        const totalGapWidth = (this.itemsPerView - 1) * this.gap;
+        this.itemWidth = (containerWidth - totalGapWidth) / this.itemsPerView;
+        
+        // Set width for each item
+        this.items.forEach(item => {
+          item.style.width = `${this.itemWidth}px`;
+        });
       }
 
       setupEventListeners() {
-        if (this.prevBtn) {
-          this.prevBtn.addEventListener('click', () => this.prev());
-        }
-        if (this.nextBtn) {
-          this.nextBtn.addEventListener('click', () => this.next());
+        // Remove old listeners if they exist
+        if (this.boundPrev) {
+          this.prevBtn?.removeEventListener('click', this.boundPrev);
+          this.nextBtn?.removeEventListener('click', this.boundNext);
         }
 
+        this.boundPrev = () => this.prev();
+        this.boundNext = () => this.next();
+
+        if (this.prevBtn) {
+          this.prevBtn.addEventListener('click', this.boundPrev);
+        }
+        if (this.nextBtn) {
+          this.nextBtn.addEventListener('click', this.boundNext);
+        }
+
+        // Touch events
         let startX = 0;
+        let startY = 0;
         let isDragging = false;
 
         this.container.addEventListener('touchstart', (e) => {
           startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
           isDragging = true;
+        }, { passive: true });
+
+        this.container.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          
+          const currentY = e.touches[0].clientY;
+          const diffY = Math.abs(currentY - startY);
+          
+          // If vertical scroll is dominant, don't hijack it
+          if (diffY > 10) {
+            isDragging = false;
+          }
         }, { passive: true });
 
         this.container.addEventListener('touchend', (e) => {
@@ -272,7 +313,7 @@
           const endX = e.changedTouches[0].clientX;
           const diff = startX - endX;
           
-          // Only trigger if swipe is significant
+          // Only trigger if horizontal swipe is significant
           if (Math.abs(diff) > 50) {
             if (diff > 0) {
               this.next();
@@ -301,21 +342,16 @@
       }
 
       updateCarousel() {
-        // Calculate item width including gap
-        const gap = {{ block.settings.category_gap }};
-        const containerWidth = this.container.offsetWidth;
-        const totalGapWidth = (this.itemsPerView - 1) * gap;
-        const itemWidth = (containerWidth - totalGapWidth) / this.itemsPerView;
-        const itemWidthWithGap = itemWidth + gap;
+        // Calculate the maximum allowed index
+        const maxIndex = Math.max(0, this.items.length - this.itemsPerView);
         
-        // Calculate translate based on actual item width + gap
-        const translateX = -(this.currentIndex * itemWidthWithGap);
+        // Ensure current index doesn't exceed maximum
+        this.currentIndex = Math.min(this.currentIndex, maxIndex);
         
-        // Ensure we don't scroll past the last set of items
-        const maxTranslate = -(Math.max(0, this.items.length - this.itemsPerView) * itemWidthWithGap);
-        const finalTranslate = Math.max(maxTranslate, translateX);
+        // Calculate translation: each item width + gap
+        const translateX = -(this.currentIndex * (this.itemWidth + this.gap));
         
-        this.container.style.transform = `translateX(${finalTranslate}px)`;
+        this.container.style.transform = `translateX(${translateX}px)`;
         this.updateButtons();
       }
 
@@ -325,7 +361,7 @@
         }
         if (this.nextBtn) {
           const maxIndex = Math.max(0, this.items.length - this.itemsPerView);
-          this.nextBtn.disabled = this.currentIndex >= maxIndex;
+          this.nextBtn.disabled = this.currentIndex >= maxIndex || this.items.length <= this.itemsPerView;
         }
       }
     }
