@@ -324,25 +324,23 @@
     let touchStartX = 0;
     let touchStartY = 0;
     let isDragging = false;
+    let startTranslate = 0;
     let currentTranslate = 0;
-    let prevTranslate = 0;
     let animationID = 0;
     
     track.addEventListener('touchstart', (e) => {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
       isDragging = true;
-      animationID = requestAnimationFrame(animation);
       track.style.transition = 'none';
       
-      // Get current translate value
-      const transform = window.getComputedStyle(track).transform;
-      if (transform !== 'none') {
-        const matrix = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
-        prevTranslate = parseFloat(matrix[4]);
-      } else {
-        prevTranslate = 0;
-      }
+      // Store the current position
+      updateSlidesPerView();
+      const itemWidth = items[0].offsetWidth;
+      startTranslate = -(currentIndex * (itemWidth + gap));
+      currentTranslate = startTranslate;
+      
+      animationID = requestAnimationFrame(animation);
     }, { passive: true });
     
     track.addEventListener('touchmove', (e) => {
@@ -357,6 +355,7 @@
       if (diffY > Math.abs(diffX) && diffY > 10) {
         isDragging = false;
         cancelAnimationFrame(animationID);
+        track.style.transition = 'transform 0.3s ease-out';
         return;
       }
       
@@ -365,7 +364,8 @@
         e.preventDefault();
       }
       
-      currentTranslate = prevTranslate + diffX;
+      // Calculate new translate position
+      currentTranslate = startTranslate + diffX;
     }, { passive: false });
     
     track.addEventListener('touchend', (e) => {
@@ -383,8 +383,10 @@
       // Determine if we should move to next/prev slide
       if (Math.abs(movedBy) > 50) {
         if (movedBy < 0) {
+          // Swiped left - go next
           move('next');
         } else {
+          // Swiped right - go prev
           move('prev');
         }
       } else {
@@ -401,8 +403,16 @@
         const maxTranslate = 0;
         const minTranslate = -((items.length - slidesPerView) * (itemWidth + gap));
         
-        // Clamp the translate value
-        const boundedTranslate = Math.max(Math.min(currentTranslate, maxTranslate), minTranslate);
+        // Clamp the translate value with resistance at edges
+        let boundedTranslate = currentTranslate;
+        
+        if (boundedTranslate > maxTranslate) {
+          // Add resistance at the start
+          boundedTranslate = maxTranslate + (boundedTranslate - maxTranslate) * 0.3;
+        } else if (boundedTranslate < minTranslate) {
+          // Add resistance at the end
+          boundedTranslate = minTranslate + (boundedTranslate - minTranslate) * 0.3;
+        }
         
         track.style.transform = `translateX(${boundedTranslate}px)`;
         requestAnimationFrame(animation);
