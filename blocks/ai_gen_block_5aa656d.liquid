@@ -278,9 +278,17 @@
       const maxIndex = Math.max(0, items.length - slidesPerView);
       
       if (direction === 'next') {
-        currentIndex = Math.min(currentIndex + scrollAmount, maxIndex);
+        currentIndex = currentIndex + scrollAmount;
+        // Loop back to start if we exceed the end
+        if (currentIndex > maxIndex) {
+          currentIndex = 0;
+        }
       } else {
-        currentIndex = Math.max(currentIndex - scrollAmount, 0);
+        currentIndex = currentIndex - scrollAmount;
+        // Loop to end if we go before the start
+        if (currentIndex < 0) {
+          currentIndex = maxIndex;
+        }
       }
       
       updateCarousel();
@@ -302,12 +310,13 @@
     function updateButtons() {
       const maxIndex = Math.max(0, items.length - slidesPerView);
       
+      // In infinite loop mode, buttons are never disabled (except when all items fit)
       if (prevBtn) {
-        prevBtn.disabled = currentIndex === 0;
+        prevBtn.disabled = items.length <= slidesPerView;
       }
       
       if (nextBtn) {
-        nextBtn.disabled = currentIndex >= maxIndex || items.length <= slidesPerView;
+        nextBtn.disabled = items.length <= slidesPerView;
       }
     }
     
