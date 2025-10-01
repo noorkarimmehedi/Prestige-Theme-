@@ -107,6 +107,55 @@
         "controls_color": "#ffffff"
       }
     },
+    "text_with_icons_qpaFbY": {
+      "type": "text-with-icons",
+      "blocks": {
+        "item_WxAGjX": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-delivery-truck",
+            "icon_width": 24,
+            "mobile_icon_width": 24,
+            "title": "Easy return",
+            "content": ""
+          }
+        },
+        "item_aBNLB8": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-award-gift",
+            "icon_width": 24,
+            "mobile_icon_width": 24,
+            "title": "Delivery within 48hours",
+            "content": ""
+          }
+        },
+        "item_nBiVVM": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-shield",
+            "icon_width": 24,
+            "mobile_icon_width": 24,
+            "title": "Secure payment",
+            "content": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_WxAGjX",
+        "item_aBNLB8",
+        "item_nBiVVM"
+      ],
+      "name": "t:sections.text_with_icons.presets.text_with_icons.name",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "stack_on_mobile": true,
+        "icon_color": "",
+        "text_color": "",
+        "text_alignment": "center"
+      }
+    },
     "featured-collections": {
       "type": "featured-collections",
       "blocks": {
@@ -514,6 +563,7 @@
   },
   "order": [
     "slideshow",
+    "text_with_icons_qpaFbY",
     "featured-collections",
     "multi-column",
     "collection-list",
