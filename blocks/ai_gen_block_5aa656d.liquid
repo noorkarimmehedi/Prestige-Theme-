@@ -25,6 +25,7 @@
     text-align: center;
     padding: 15px 0;
     flex-shrink: 0;
+    flex-grow: 0;
     box-sizing: border-box;
   }
 
@@ -251,8 +252,9 @@
       }
 
       calculateDimensions() {
-        const isMobile = window.innerWidth <= 768;
-        this.itemsPerView = isMobile ? this.itemsPerViewMobile : this.itemsPerViewDesktop;
+        // Use proper breakpoint detection
+        const windowWidth = window.innerWidth;
+        this.itemsPerView = windowWidth <= 768 ? this.itemsPerViewMobile : this.itemsPerViewDesktop;
         
         // Get actual container width
         const containerWidth = this.container.parentElement.offsetWidth;
@@ -261,10 +263,14 @@
         const totalGapWidth = (this.itemsPerView - 1) * this.gap;
         this.itemWidth = (containerWidth - totalGapWidth) / this.itemsPerView;
         
-        // Set width for each item
+        // Set width for each item explicitly
         this.items.forEach(item => {
           item.style.width = `${this.itemWidth}px`;
+          item.style.minWidth = `${this.itemWidth}px`;
+          item.style.maxWidth = `${this.itemWidth}px`;
         });
+        
+        console.log('Window width:', windowWidth, 'Items per view:', this.itemsPerView, 'Item width:', this.itemWidth);
       }
 
       setupEventListeners() {
