@@ -6,7 +6,7 @@
   - Slides by 2 categories on mobile, 4 on desktop
   - Autoplay functionality
   - Navigation arrows and dots
-  - Customizable styling
+  - Customizable styling with font picker support
 {% endcomment %}
 
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
@@ -22,7 +22,7 @@
   .ai-category-slider-container-{{ ai_gen_id }} {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0;
   }
 
   .ai-category-slider-header-{{ ai_gen_id }} {
@@ -33,6 +33,7 @@
   .ai-category-slider-title-{{ ai_gen_id }} {
     font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
     font-weight: {{ block.settings.heading_font.weight }};
+    font-style: {{ block.settings.heading_font.style }};
     font-size: {{ block.settings.heading_size }}px;
     color: {{ block.settings.heading_color }};
     margin: 0 0 10px;
@@ -40,7 +41,9 @@
   }
 
   .ai-category-slider-subtitle-{{ ai_gen_id }} {
-    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-family: {{ block.settings.subtitle_font.family }}, {{ block.settings.subtitle_font.fallback_families }};
+    font-weight: {{ block.settings.subtitle_font.weight }};
+    font-style: {{ block.settings.subtitle_font.style }};
     font-size: {{ block.settings.subtitle_size }}px;
     color: {{ block.settings.subtitle_color }};
     margin: 0;
@@ -78,14 +81,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-decoration: none;
     color: inherit;
-  }
-
-  .ai-category-card-{{ ai_gen_id }}:first-child {
-    margin-left: 0;
-  }
-
-  .ai-category-card-{{ ai_gen_id }}:last-child {
-    margin-right: 0;
   }
 
   .ai-category-card-{{ ai_gen_id }}:hover {
@@ -147,8 +142,9 @@
   }
 
   .ai-category-card-title-{{ ai_gen_id }} {
-    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
-    font-weight: {{ block.settings.heading_font.weight }};
+    font-family: {{ block.settings.card_title_font.family }}, {{ block.settings.card_title_font.fallback_families }};
+    font-weight: {{ block.settings.card_title_font.weight }};
+    font-style: {{ block.settings.card_title_font.style }};
     font-size: {{ block.settings.card_title_size }}px;
     color: {{ block.settings.card_title_color }};
     margin: 0 0 5px;
@@ -156,7 +152,9 @@
   }
 
   .ai-category-card-count-{{ ai_gen_id }} {
-    font-family: {{ block.settings.body_font.family }}, {{ block.settings.body_font.fallback_families }};
+    font-family: {{ block.settings.card_count_font.family }}, {{ block.settings.card_count_font.fallback_families }};
+    font-weight: {{ block.settings.card_count_font.weight }};
+    font-style: {{ block.settings.card_count_font.style }};
     font-size: {{ block.settings.card_count_size }}px;
     color: {{ block.settings.card_count_color }};
     margin: 0;
@@ -221,7 +219,7 @@
     width: 8px;
     height: 8px;
     border-radius: 2px;
-    background-color: #000000;
+    background-color: {{ block.settings.dot_color }};
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -229,19 +227,19 @@
   }
 
   .ai-category-slider-dot-{{ ai_gen_id }}.active {
-    background-color: #000000;
+    background-color: {{ block.settings.dot_active_color }};
     opacity: 1;
     width: 24px;
   }
 
   @media screen and (max-width: 768px) {
     .ai-category-slider-container-{{ ai_gen_id }} {
-      padding: 0 20px;
+      padding: 0;
       max-width: 100%;
     }
 
     .ai-category-slider-wrapper-{{ ai_gen_id }} {
-      margin: 0;
+      margin: 0 20px;
       padding: 0;
     }
 
@@ -279,11 +277,11 @@
 
   @media screen and (max-width: 480px) {
     .ai-category-slider-container-{{ ai_gen_id }} {
-      padding: 0;
+      padding: 0 15px;
     }
 
     .ai-category-slider-wrapper-{{ ai_gen_id }} {
-      margin: 0 15px;
+      margin: 0;
       padding: 0;
     }
 
@@ -295,7 +293,7 @@
 
     .ai-category-slider-header-{{ ai_gen_id }} {
       margin-bottom: 25px;
-      padding: 0 15px;
+      padding: 0;
     }
 
     .ai-category-slider-title-{{ ai_gen_id }} {
@@ -317,15 +315,15 @@
     }
 
     .ai-category-slider-nav-prev-{{ ai_gen_id }} {
-      left: 2px;
+      left: -10px;
     }
 
     .ai-category-slider-nav-next-{{ ai_gen_id }} {
-      right: 2px;
+      right: -10px;
     }
 
     .ai-category-slider-dots-{{ ai_gen_id }} {
-      padding: 0 15px;
+      padding: 0;
     }
   }
 {% endstyle %}
@@ -490,10 +488,8 @@
       createDots() {
         if (!this.dotsContainer) return;
         
-        // Calculate total pages based on slides per view
         const totalPages = Math.ceil(this.cards.length / this.slidesPerView);
         
-        // Hide dots if only one page
         if (totalPages <= 1) {
           this.dotsContainer.style.display = 'none';
           return;
@@ -502,7 +498,6 @@
         this.dotsContainer.style.display = 'flex';
         this.dotsContainer.innerHTML = '';
         
-        // Create dots for each page
         for (let i = 0; i < totalPages; i++) {
           const slideIndex = i * this.slidesPerView;
           const dot = document.createElement('button');
@@ -531,7 +526,6 @@
           this.nextBtn.disabled = this.currentSlide >= this.maxSlide;
         }
 
-        // Force dots update
         setTimeout(() => {
           this.updateDots();
         }, 50);
@@ -543,10 +537,8 @@
         const dots = this.dotsContainer.querySelectorAll('.ai-category-slider-dot-{{ ai_gen_id }}');
         if (dots.length === 0) return;
         
-        // Calculate which page we're on based on current slide
         const currentPage = Math.floor(this.currentSlide / this.slidesPerView);
         
-        // Update all dots
         dots.forEach((dot, index) => {
           if (index === currentPage) {
             dot.classList.add('active');
@@ -658,7 +650,6 @@
         this.addEventListener('mouseenter', () => this.stopAutoplay());
         this.addEventListener('mouseleave', () => this.restartAutoplay());
 
-        // Enhanced Touch/Swipe Support
         let touchStartX = 0;
         let touchStartY = 0;
         let touchCurrentX = 0;
@@ -703,12 +694,10 @@
           const diffX = touchCurrentX - touchStartX;
           const diffY = touchCurrentY - touchStartY;
 
-          // Check if horizontal swipe
           if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 5) {
             isSwiping = true;
             e.preventDefault();
             
-            // Visual feedback during swipe
             const cardWidth = this.track.offsetWidth / this.slidesPerView;
             const currentTranslate = -(this.currentSlide * cardWidth);
             const newTranslate = currentTranslate + diffX;
@@ -729,34 +718,27 @@
           this.track.classList.remove('dragging');
           this.track.style.transition = '';
 
-          // Check if it's a horizontal swipe (not vertical scroll)
           if (isSwiping && Math.abs(diffX) > Math.abs(diffY)) {
             const threshold = 50;
             const velocityThreshold = 0.3;
 
             if (Math.abs(diffX) > threshold || swipeVelocity > velocityThreshold) {
               if (diffX > 0) {
-                // Swiped left - go to next
                 this.nextSlide();
               } else {
-                // Swiped right - go to previous
                 this.prevSlide();
               }
               
-              // Force update dots after swipe
               setTimeout(() => {
                 this.updateDots();
               }, 100);
             } else {
-              // Snap back to current position
               this.updateSlider();
             }
           } else {
-            // Return to current position
             this.updateSlider();
           }
 
-          // Reset values
           touchStartX = 0;
           touchStartY = 0;
           touchCurrentX = 0;
@@ -766,22 +748,18 @@
           this.restartAutoplay();
         };
 
-        // Touch events for mobile
         this.track.addEventListener('touchstart', onSwipeStart, { passive: true });
         this.track.addEventListener('touchmove', onSwipeMove, { passive: false });
         this.track.addEventListener('touchend', onSwipeEnd, { passive: true });
         this.track.addEventListener('touchcancel', onSwipeEnd, { passive: true });
 
-        // Mouse events for desktop
         this.track.addEventListener('mousedown', onSwipeStart);
         this.track.addEventListener('mousemove', onSwipeMove);
         this.track.addEventListener('mouseup', onSwipeEnd);
         this.track.addEventListener('mouseleave', onSwipeEnd);
 
-        // Prevent default drag behavior
         this.track.addEventListener('dragstart', (e) => e.preventDefault());
         
-        // Prevent link clicks during swipe
         const links = this.track.querySelectorAll('a');
         links.forEach(link => {
           link.addEventListener('click', (e) => {
@@ -1275,15 +1253,7 @@
       "type": "font_picker",
       "id": "heading_font",
       "label": "Heading font",
-      "default": "helvetica_n4",
-      "info": "Select a font for headings and titles"
-    },
-    {
-      "type": "font_picker",
-      "id": "body_font",
-      "label": "Body font",
-      "default": "helvetica_n4",
-      "info": "Select a font for body text and subtitles"
+      "default": "assistant_n4"
     },
     {
       "type": "range",
@@ -1296,6 +1266,12 @@
       "default": 32
     },
     {
+      "type": "font_picker",
+      "id": "subtitle_font",
+      "label": "Subtitle font",
+      "default": "assistant_n4"
+    },
+    {
       "type": "range",
       "id": "subtitle_size",
       "min": 12,
@@ -1306,6 +1282,12 @@
       "default": 16
     },
     {
+      "type": "font_picker",
+      "id": "card_title_font",
+      "label": "Card title font",
+      "default": "assistant_n4"
+    },
+    {
       "type": "range",
       "id": "card_title_size",
       "min": 14,
@@ -1314,6 +1296,12 @@
       "unit": "px",
       "label": "Card title size",
       "default": 20
+    },
+    {
+      "type": "font_picker",
+      "id": "card_count_font",
+      "label": "Product count font",
+      "default": "assistant_n4"
     },
     {
       "type": "range",
