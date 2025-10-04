@@ -238,9 +238,9 @@
         "collection_T9rEVa": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "new-arrival",
             "products_count": 8,
-            "title": "",
+            "title": "YOU MAY ALSO LIKE",
             "link_url": "",
             "link_text": "View all"
           }
@@ -254,12 +254,12 @@
         "color_scheme": "",
         "separate_section_with_border": true,
         "hide_product_information": false,
-        "stack_products": false,
-        "products_per_row_mobile": "2",
+        "stack_products": true,
+        "products_per_row_mobile": "1",
         "products_per_row_desktop": 4,
         "horizontal_spacing_factor": 1,
         "vertical_spacing_factor": 1,
-        "subheading": "Featured collection"
+        "subheading": ""
       }
     }
   },
