@@ -6,7 +6,7 @@
   - Slides by 2 categories on mobile, 4 on desktop
   - Autoplay functionality
   - Navigation arrows and dots
-  - Customizable styling with font picker support
+  - Customizable styling
 {% endcomment %}
 
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
@@ -22,7 +22,7 @@
   .ai-category-slider-container-{{ ai_gen_id }} {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0;
+    padding: 0 20px;
   }
 
   .ai-category-slider-header-{{ ai_gen_id }} {
@@ -31,9 +31,8 @@
   }
 
   .ai-category-slider-title-{{ ai_gen_id }} {
-    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
-    font-weight: {{ block.settings.heading_font.weight }};
-    font-style: {{ block.settings.heading_font.style }};
+    font-family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    font-weight: {{ settings.type_heading_font.weight }};
     font-size: {{ block.settings.heading_size }}px;
     color: {{ block.settings.heading_color }};
     margin: 0 0 10px;
@@ -41,9 +40,7 @@
   }
 
   .ai-category-slider-subtitle-{{ ai_gen_id }} {
-    font-family: {{ block.settings.subtitle_font.family }}, {{ block.settings.subtitle_font.fallback_families }};
-    font-weight: {{ block.settings.subtitle_font.weight }};
-    font-style: {{ block.settings.subtitle_font.style }};
+    font-family: {{ settings.type_base_font.family }}, {{ settings.type_base_font.fallback_families }};
     font-size: {{ block.settings.subtitle_size }}px;
     color: {{ block.settings.subtitle_color }};
     margin: 0;
@@ -54,21 +51,14 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    margin: 0 auto;
   }
 
   .ai-category-slider-track-{{ ai_gen_id }} {
     display: flex;
     transition: transform 0.3s ease;
     gap: {{ block.settings.card_spacing }}px;
-    touch-action: pan-y pinch-zoom;
+    touch-action: pan-y;
     width: 100%;
-    cursor: grab;
-  }
-
-  .ai-category-slider-track-{{ ai_gen_id }}.dragging {
-    cursor: grabbing;
-    transition: none;
   }
 
   .ai-category-card-{{ ai_gen_id }} {
@@ -142,9 +132,8 @@
   }
 
   .ai-category-card-title-{{ ai_gen_id }} {
-    font-family: {{ block.settings.card_title_font.family }}, {{ block.settings.card_title_font.fallback_families }};
-    font-weight: {{ block.settings.card_title_font.weight }};
-    font-style: {{ block.settings.card_title_font.style }};
+    font-family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    font-weight: {{ settings.type_heading_font.weight }};
     font-size: {{ block.settings.card_title_size }}px;
     color: {{ block.settings.card_title_color }};
     margin: 0 0 5px;
@@ -152,9 +141,7 @@
   }
 
   .ai-category-card-count-{{ ai_gen_id }} {
-    font-family: {{ block.settings.card_count_font.family }}, {{ block.settings.card_count_font.fallback_families }};
-    font-weight: {{ block.settings.card_count_font.weight }};
-    font-style: {{ block.settings.card_count_font.style }};
+    font-family: {{ settings.type_base_font.family }}, {{ settings.type_base_font.fallback_families }};
     font-size: {{ block.settings.card_count_size }}px;
     color: {{ block.settings.card_count_color }};
     margin: 0;
@@ -216,30 +203,30 @@
   }
 
   .ai-category-slider-dot-{{ ai_gen_id }} {
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
     background-color: {{ block.settings.dot_color }};
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    opacity: 0.4;
+    opacity: 0.3;
   }
 
   .ai-category-slider-dot-{{ ai_gen_id }}.active {
     background-color: {{ block.settings.dot_active_color }};
     opacity: 1;
-    width: 24px;
+    transform: scale(1.2);
   }
 
   @media screen and (max-width: 768px) {
     .ai-category-slider-container-{{ ai_gen_id }} {
-      padding: 0;
+      padding: 0 20px;
       max-width: 100%;
     }
 
     .ai-category-slider-wrapper-{{ ai_gen_id }} {
-      margin: 0 20px;
+      margin: 0;
       padding: 0;
     }
 
@@ -255,11 +242,11 @@
     }
 
     .ai-category-slider-nav-prev-{{ ai_gen_id }} {
-      left: 5px;
+      left: -15px;
     }
 
     .ai-category-slider-nav-next-{{ ai_gen_id }} {
-      right: 5px;
+      right: -15px;
     }
 
     .ai-category-card-overlay-{{ ai_gen_id }} {
@@ -276,13 +263,8 @@
   }
 
   @media screen and (max-width: 480px) {
-    .ai-category-slider-container-{{ ai_gen_id }} {
-      padding: 0 15px;
-    }
-
     .ai-category-slider-wrapper-{{ ai_gen_id }} {
-      margin: 0;
-      padding: 0;
+      margin: 0 45px;
     }
 
     .ai-category-card-{{ ai_gen_id }} {
@@ -293,7 +275,7 @@
 
     .ai-category-slider-header-{{ ai_gen_id }} {
       margin-bottom: 25px;
-      padding: 0;
+      padding: 0 15px;
     }
 
     .ai-category-slider-title-{{ ai_gen_id }} {
@@ -315,15 +297,15 @@
     }
 
     .ai-category-slider-nav-prev-{{ ai_gen_id }} {
-      left: -10px;
+      left: 5px;
     }
 
     .ai-category-slider-nav-next-{{ ai_gen_id }} {
-      right: -10px;
+      right: 5px;
     }
 
     .ai-category-slider-dots-{{ ai_gen_id }} {
-      padding: 0;
+      padding: 0 15px;
     }
   }
 {% endstyle %}
@@ -420,12 +402,12 @@
       </div>
 
       {% if block.settings.show_navigation %}
-        <button class="ai-category-slider-nav-{{ ai_gen_id }} ai-category-slider-nav-prev-{{ ai_gen_id }}" data-prev aria-label="Previous slide" style="display: none;">
+        <button class="ai-category-slider-nav-{{ ai_gen_id }} ai-category-slider-nav-prev-{{ ai_gen_id }}" data-prev aria-label="Previous slide">
           <svg viewBox="0 0 24 24">
             <path d="M15 18l-6-6 6-6"/>
           </svg>
         </button>
-        <button class="ai-category-slider-nav-{{ ai_gen_id }} ai-category-slider-nav-next-{{ ai_gen_id }}" data-next aria-label="Next slide" style="display: none;">
+        <button class="ai-category-slider-nav-{{ ai_gen_id }} ai-category-slider-nav-next-{{ ai_gen_id }}" data-next aria-label="Next slide">
           <svg viewBox="0 0 24 24">
             <path d="M9 18l6-6-6-6"/>
           </svg>
@@ -486,28 +468,29 @@
       }
 
       createDots() {
-        if (!this.dotsContainer) return;
-        
-        const totalPages = Math.ceil(this.cards.length / this.slidesPerView);
-        
-        if (totalPages <= 1) {
-          this.dotsContainer.style.display = 'none';
+        if (!this.dotsContainer || this.maxSlide === 0) {
+          if (this.dotsContainer) {
+            this.dotsContainer.style.display = 'none';
+          }
           return;
         }
         
         this.dotsContainer.style.display = 'flex';
         this.dotsContainer.innerHTML = '';
         
-        for (let i = 0; i < totalPages; i++) {
-          const slideIndex = i * this.slidesPerView;
-          const dot = document.createElement('button');
-          const currentPage = Math.floor(this.currentSlide / this.slidesPerView);
-          const isActive = currentPage === i;
-          
-          dot.className = `ai-category-slider-dot-{{ ai_gen_id }} ${isActive ? 'active' : ''}`;
-          dot.setAttribute('data-slide', slideIndex);
-          dot.setAttribute('aria-label', `Go to page ${i + 1}`);
-          this.dotsContainer.appendChild(dot);
+        const step = this.slidesPerView;
+        const numDots = Math.ceil((this.cards.length) / step);
+        
+        for (let i = 0; i < numDots; i++) {
+          const slideIndex = i * step;
+          if (slideIndex <= this.maxSlide) {
+            const dot = document.createElement('button');
+            const isActive = this.currentSlide >= slideIndex && this.currentSlide < slideIndex + step;
+            dot.className = `ai-category-slider-dot-{{ ai_gen_id }} ${isActive ? 'active' : ''}`;
+            dot.setAttribute('data-slide', slideIndex);
+            dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+            this.dotsContainer.appendChild(dot);
+          }
         }
       }
 
@@ -526,25 +509,19 @@
           this.nextBtn.disabled = this.currentSlide >= this.maxSlide;
         }
 
-        setTimeout(() => {
-          this.updateDots();
-        }, 50);
+        this.updateDots();
       }
 
       updateDots() {
         if (!this.dotsContainer) return;
         
+        const step = this.slidesPerView;
         const dots = this.dotsContainer.querySelectorAll('.ai-category-slider-dot-{{ ai_gen_id }}');
-        if (dots.length === 0) return;
         
-        const currentPage = Math.floor(this.currentSlide / this.slidesPerView);
-        
-        dots.forEach((dot, index) => {
-          if (index === currentPage) {
-            dot.classList.add('active');
-          } else {
-            dot.classList.remove('active');
-          }
+        dots.forEach((dot) => {
+          const slideIndex = parseInt(dot.getAttribute('data-slide'));
+          const isActive = this.currentSlide >= slideIndex && this.currentSlide < slideIndex + step;
+          dot.classList.toggle('active', isActive);
         });
       }
 
@@ -553,7 +530,6 @@
         
         this.currentSlide = Math.max(0, Math.min(slideIndex, this.maxSlide));
         this.updateSlider();
-        this.updateDots();
         this.restartAutoplay();
       }
 
@@ -564,15 +540,9 @@
         
         if (this.currentSlide < this.maxSlide) {
           const nextSlide = Math.min(this.currentSlide + step, this.maxSlide);
-          this.currentSlide = nextSlide;
-          this.updateSlider();
-          this.updateDots();
-          this.restartAutoplay();
+          this.goToSlide(nextSlide);
         } else if (this.autoplay) {
-          this.currentSlide = 0;
-          this.updateSlider();
-          this.updateDots();
-          this.restartAutoplay();
+          this.goToSlide(0);
         }
       }
 
@@ -583,10 +553,7 @@
         
         if (this.currentSlide > 0) {
           const prevSlide = Math.max(this.currentSlide - step, 0);
-          this.currentSlide = prevSlide;
-          this.updateSlider();
-          this.updateDots();
-          this.restartAutoplay();
+          this.goToSlide(prevSlide);
         }
       }
 
@@ -650,124 +617,62 @@
         this.addEventListener('mouseenter', () => this.stopAutoplay());
         this.addEventListener('mouseleave', () => this.restartAutoplay());
 
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchCurrentX = 0;
-        let touchCurrentY = 0;
-        let isSwiping = false;
-        let swipeStartTime = 0;
-        let initialTransform = 0;
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        let startTime = 0;
 
-        const getTouchX = (e) => {
-          return e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-        };
-
-        const getTouchY = (e) => {
-          return e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
-        };
-
-        const onSwipeStart = (e) => {
-          touchStartX = getTouchX(e);
-          touchStartY = getTouchY(e);
-          touchCurrentX = touchStartX;
-          touchCurrentY = touchStartY;
-          swipeStartTime = Date.now();
-          
-          const transform = window.getComputedStyle(this.track).transform;
-          if (transform !== 'none') {
-            const matrix = new DOMMatrix(transform);
-            initialTransform = matrix.m41;
-          } else {
-            initialTransform = 0;
-          }
-          
+        const handleTouchStart = (e) => {
+          startX = e.touches ? e.touches[0].clientX : e.clientX;
+          currentX = startX;
+          isDragging = true;
+          startTime = Date.now();
           this.stopAutoplay();
-          this.track.classList.add('dragging');
+          this.isTransitioning = false;
         };
 
-        const onSwipeMove = (e) => {
-          if (!touchStartX) return;
-
-          touchCurrentX = getTouchX(e);
-          touchCurrentY = getTouchY(e);
-
-          const diffX = touchCurrentX - touchStartX;
-          const diffY = touchCurrentY - touchStartY;
-
-          if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 5) {
-            isSwiping = true;
-            e.preventDefault();
-            
-            const cardWidth = this.track.offsetWidth / this.slidesPerView;
-            const currentTranslate = -(this.currentSlide * cardWidth);
-            const newTranslate = currentTranslate + diffX;
-            
-            this.track.style.transition = 'none';
-            this.track.style.transform = `translateX(${newTranslate}px)`;
-          }
+        const handleTouchMove = (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+          currentX = e.touches ? e.touches[0].clientX : e.clientX;
         };
 
-        const onSwipeEnd = (e) => {
-          if (!touchStartX) return;
-
-          const diffX = touchStartX - touchCurrentX;
-          const diffY = Math.abs(touchStartY - touchCurrentY);
-          const swipeDuration = Date.now() - swipeStartTime;
-          const swipeVelocity = Math.abs(diffX) / swipeDuration;
-
-          this.track.classList.remove('dragging');
-          this.track.style.transition = '';
-
-          if (isSwiping && Math.abs(diffX) > Math.abs(diffY)) {
-            const threshold = 50;
-            const velocityThreshold = 0.3;
-
-            if (Math.abs(diffX) > threshold || swipeVelocity > velocityThreshold) {
-              if (diffX > 0) {
-                this.nextSlide();
-              } else {
-                this.prevSlide();
-              }
-              
-              setTimeout(() => {
-                this.updateDots();
-              }, 100);
-            } else {
-              this.updateSlider();
+        const handleTouchEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          
+          const diff = startX - currentX;
+          const timeDiff = Date.now() - startTime;
+          const threshold = 50;
+          const velocity = Math.abs(diff) / timeDiff;
+          
+          if (Math.abs(diff) > threshold || velocity > 0.3) {
+            this.isTransitioning = true;
+            
+            if (diff > 0 && this.currentSlide < this.maxSlide) {
+              this.nextSlide();
+            } else if (diff < 0 && this.currentSlide > 0) {
+              this.prevSlide();
             }
-          } else {
-            this.updateSlider();
+            
+            setTimeout(() => {
+              this.isTransitioning = false;
+            }, 300);
           }
-
-          touchStartX = 0;
-          touchStartY = 0;
-          touchCurrentX = 0;
-          touchCurrentY = 0;
-          isSwiping = false;
           
           this.restartAutoplay();
         };
 
-        this.track.addEventListener('touchstart', onSwipeStart, { passive: true });
-        this.track.addEventListener('touchmove', onSwipeMove, { passive: false });
-        this.track.addEventListener('touchend', onSwipeEnd, { passive: true });
-        this.track.addEventListener('touchcancel', onSwipeEnd, { passive: true });
+        this.track.addEventListener('touchstart', handleTouchStart, { passive: false });
+        this.track.addEventListener('touchmove', handleTouchMove, { passive: false });
+        this.track.addEventListener('touchend', handleTouchEnd);
 
-        this.track.addEventListener('mousedown', onSwipeStart);
-        this.track.addEventListener('mousemove', onSwipeMove);
-        this.track.addEventListener('mouseup', onSwipeEnd);
-        this.track.addEventListener('mouseleave', onSwipeEnd);
+        this.track.addEventListener('mousedown', handleTouchStart);
+        this.track.addEventListener('mousemove', handleTouchMove);
+        this.track.addEventListener('mouseup', handleTouchEnd);
+        this.track.addEventListener('mouseleave', handleTouchEnd);
 
         this.track.addEventListener('dragstart', (e) => e.preventDefault());
-        
-        const links = this.track.querySelectorAll('a');
-        links.forEach(link => {
-          link.addEventListener('click', (e) => {
-            if (Math.abs(touchStartX - touchCurrentX) > 10) {
-              e.preventDefault();
-            }
-          });
-        });
       }
 
       disconnectedCallback() {
@@ -1250,12 +1155,6 @@
       "content": "Typography"
     },
     {
-      "type": "font_picker",
-      "id": "heading_font",
-      "label": "Heading font",
-      "default": "assistant_n4"
-    },
-    {
       "type": "range",
       "id": "heading_size",
       "min": 20,
@@ -1264,12 +1163,6 @@
       "unit": "px",
       "label": "Heading size",
       "default": 32
-    },
-    {
-      "type": "font_picker",
-      "id": "subtitle_font",
-      "label": "Subtitle font",
-      "default": "assistant_n4"
     },
     {
       "type": "range",
@@ -1282,12 +1175,6 @@
       "default": 16
     },
     {
-      "type": "font_picker",
-      "id": "card_title_font",
-      "label": "Card title font",
-      "default": "assistant_n4"
-    },
-    {
       "type": "range",
       "id": "card_title_size",
       "min": 14,
@@ -1296,12 +1183,6 @@
       "unit": "px",
       "label": "Card title size",
       "default": 20
-    },
-    {
-      "type": "font_picker",
-      "id": "card_count_font",
-      "label": "Product count font",
-      "default": "assistant_n4"
     },
     {
       "type": "range",
