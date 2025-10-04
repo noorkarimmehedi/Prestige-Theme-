@@ -57,8 +57,14 @@
     display: flex;
     transition: transform 0.3s ease;
     gap: {{ block.settings.card_spacing }}px;
-    touch-action: pan-y;
+    touch-action: pan-y pinch-zoom;
     width: 100%;
+    cursor: grab;
+  }
+
+  .ai-category-slider-track-{{ ai_gen_id }}.dragging {
+    cursor: grabbing;
+    transition: none;
   }
 
   .ai-category-card-{{ ai_gen_id }} {
@@ -263,8 +269,12 @@
   }
 
   @media screen and (max-width: 480px) {
+    .ai-category-slider-container-{{ ai_gen_id }} {
+      padding: 0 15px;
+    }
+
     .ai-category-slider-wrapper-{{ ai_gen_id }} {
-      margin: 0 45px;
+      margin: 0;
     }
 
     .ai-category-card-{{ ai_gen_id }} {
@@ -275,7 +285,7 @@
 
     .ai-category-slider-header-{{ ai_gen_id }} {
       margin-bottom: 25px;
-      padding: 0 15px;
+      padding: 0;
     }
 
     .ai-category-slider-title-{{ ai_gen_id }} {
@@ -297,15 +307,15 @@
     }
 
     .ai-category-slider-nav-prev-{{ ai_gen_id }} {
-      left: 5px;
+      left: -10px;
     }
 
     .ai-category-slider-nav-next-{{ ai_gen_id }} {
-      right: 5px;
+      right: -10px;
     }
 
     .ai-category-slider-dots-{{ ai_gen_id }} {
-      padding: 0 15px;
+      padding: 0;
     }
   }
 {% endstyle %}
@@ -618,14 +628,21 @@
         this.addEventListener('mouseleave', () => this.restartAutoplay());
 
         let startX = 0;
+        let startY = 0;
         let currentX = 0;
+        let currentY = 0;
         let isDragging = false;
         let startTime = 0;
+        let isHorizontalSwipe = false;
 
         const handleTouchStart = (e) => {
-          startX = e.touches ? e.touches[0].clientX : e.clientX;
+          const touch = e.touches ? e.touches[0] : e;
+          startX = touch.clientX;
+          startY = touch.clientY;
           currentX = startX;
+          currentY = startY;
           isDragging = true;
+          isHorizontalSwipe = false;
           startTime = Date.now();
           this.stopAutoplay();
           this.isTransitioning = false;
@@ -633,17 +650,37 @@
 
         const handleTouchMove = (e) => {
           if (!isDragging) return;
-          e.preventDefault();
-          currentX = e.touches ? e.touches[0].clientX : e.clientX;
+          
+          const touch = e.touches ? e.touches[0] : e;
+          currentX = touch.clientX;
+          currentY = touch.clientY;
+          
+          const diffX = Math.abs(currentX - startX);
+          const diffY = Math.abs(currentY - startY);
+          
+          // Determine if this is a horizontal swipe
+          if (!isHorizontalSwipe && (diffX > 10 || diffY > 10)) {
+            isHorizontalSwipe = diffX > diffY;
+          }
+          
+          // Prevent default only for horizontal swipes
+          if (isHorizontalSwipe) {
+            e.preventDefault();
+          }
         };
 
-        const handleTouchEnd = () => {
+        const handleTouchEnd = (e) => {
           if (!isDragging) return;
           isDragging = false;
           
+          if (!isHorizontalSwipe) {
+            this.restartAutoplay();
+            return;
+          }
+          
           const diff = startX - currentX;
           const timeDiff = Date.now() - startTime;
-          const threshold = 50;
+          const threshold = 30;
           const velocity = Math.abs(diff) / timeDiff;
           
           if (Math.abs(diff) > threshold || velocity > 0.3) {
@@ -663,9 +700,10 @@
           this.restartAutoplay();
         };
 
-        this.track.addEventListener('touchstart', handleTouchStart, { passive: false });
+        this.track.addEventListener('touchstart', handleTouchStart, { passive: true });
         this.track.addEventListener('touchmove', handleTouchMove, { passive: false });
-        this.track.addEventListener('touchend', handleTouchEnd);
+        this.track.addEventListener('touchend', handleTouchEnd, { passive: true });
+        this.track.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
         this.track.addEventListener('mousedown', handleTouchStart);
         this.track.addEventListener('mousemove', handleTouchMove);
@@ -673,6 +711,13 @@
         this.track.addEventListener('mouseleave', handleTouchEnd);
 
         this.track.addEventListener('dragstart', (e) => e.preventDefault());
+        
+        // Prevent click events from triggering during swipe
+        this.track.addEventListener('click', (e) => {
+          if (Math.abs(startX - currentX) > 10) {
+            e.preventDefault();
+          }
+        }, true);
       }
 
       disconnectedCallback() {
