@@ -70,7 +70,7 @@
       "settings": {
         "color_scheme": "scheme-2",
         "separate_section_with_border": true,
-        "image_size": "auto",
+        "image_size": "sm",
         "show_text_outside": false,
         "space_items": true,
         "stack_collections": false,
