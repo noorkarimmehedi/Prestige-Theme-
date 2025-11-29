@@ -15,13 +15,13 @@
         "slide-1": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/demo.png",
-            "mobile_image": "shopify://shop_images/demo.png",
+            "image": "shopify://shop_images/Free-Delivery.png",
+            "mobile_image": "shopify://shop_images/Free-Delivery.png",
             "subheading": "A STORY",
             "title": "NEVER BE TOLD",
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
-            "content_max_width": 780,
+            "content_max_width": 800,
             "button_1_text": "SHOP NOW",
             "button_1_link": "",
             "button_1_style": "solid",
