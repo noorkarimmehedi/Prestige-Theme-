@@ -148,6 +148,7 @@
         "item_aBNLB8",
         "item_nBiVVM"
       ],
+      "disabled": true,
       "name": "t:sections.text_with_icons.presets.text_with_icons.name",
       "settings": {
         "color_scheme": "scheme-2",
